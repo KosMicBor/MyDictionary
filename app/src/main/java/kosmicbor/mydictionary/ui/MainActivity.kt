@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity(), DictionaryView {
                         Snackbar.LENGTH_SHORT,
                     ).show()
                 }
+
+                showStandardViews()
             }
         }
     }

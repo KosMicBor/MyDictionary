@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textview.MaterialTextView
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.MainScreenRvItemLayoutBinding
 import kosmicbor.mydictionary.model.data.ExampleTranslation
@@ -22,6 +21,7 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
         val wordPartOfSpeech = binding.mainScreenRvItemWordPosTextview
         val wordPronunciation = binding.mainScreenRvItemWordPronunciationTextview
         val wordTranslation = binding.mainScreenRvItemWordTranslationTextview
+        val wordExamples = binding.mainScreenRvItemWordExamplesTextview
         val container = binding.mainScreenRvItemContainerLinearlayout
     }
 
@@ -66,19 +66,33 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
                     translationList[position].translationsArray ?: emptyList()
                 )
 
-            translationList[position].translationsArray?.forEach {
-                it.examples?.forEach { example ->
-                    val textView = MaterialTextView(itemView.context)
-                    val exampleText = "- ${example.exampleText} (${
+            wordExamples.text = buildExamplesText(translationList[position].translationsArray)
+        }
+    }
+
+    private fun buildExamplesText(translationsArray: List<WordTranslation>?): String {
+
+        val sb = StringBuilder()
+
+        translationsArray?.forEach {
+
+            it.examples?.forEach { example ->
+
+                sb.append("- ${example.exampleText} ")
+
+                sb.append(
+                    "(${
                         getExampleTranslations(
                             example.exampleTranslation
                         )
                     })"
-                    textView.text = exampleText
-                    container.addView(textView)
-                }
+                )
+
+                sb.append("\n")
             }
         }
+
+        return sb.toString()
     }
 
     private fun getExampleTranslations(exampleTranslations: List<ExampleTranslation>): String {
