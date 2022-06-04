@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_screen_rv_item_container_cardview"
+    style="@style/main_screen_item_cardview_style"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/main_screen_rv_item_container_linearlayout"
+        style="@style/main_screen_rv_item_container_style"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_screen_rv_item_word_textview"
+            style="@style/main_screen_rv_item_word_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="time" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_screen_rv_item_word_pos_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="noun" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_screen_rv_item_word_pronunciation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="taim" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_screen_rv_item_word_translation_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="время, тайм, период" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_screen_rv_item_word_examples_label_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_screen_rv_item_word_examples_label" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="_0dp">0dp</dimen>
+    <dimen name="main_screen_text_input_layout_margin">16dp</dimen>
+    <dimen name="main_screen_translate_button_margin">5dp</dimen>
+    <dimen name="main_screen_search_button_stroke_width">2dp</dimen>
+    <dimen name="main_screen_recycler_view_padding">16dp</dimen>
+    <dimen name="main_screen_translate_button_marginEnd">16dp</dimen>
+    <dimen name="main_screen_translate_button_marginStart">16dp</dimen>
+    <dimen name="main_screen_item_cardview_elevation">55dp</dimen>
+    <dimen name="main_screen_item_cardview_margin">12dp</dimen>
+    <dimen name="main_screen_item_cardview_corner_radius">12dp</dimen>
+    <dimen name="main_screen_rv_item_container_padding">12dp</dimen>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="main_screen_translate_button_style">
+        <item name="android:layout_marginTop">@dimen/main_screen_translate_button_margin</item>
+        <item name="android:layout_marginEnd">@dimen/main_screen_translate_button_marginEnd</item>
+        <item name="android:layout_marginStart">@dimen/main_screen_translate_button_marginStart</item>
+    </style>
+
+    <style name="main_screen_text_input_layout_style">
+        <item name="android:layout_marginStart">@dimen/main_screen_text_input_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/main_screen_text_input_layout_margin</item>
+        <item name="android:layout_marginBottom">@dimen/main_screen_text_input_layout_margin</item>
+        <item name="counterEnabled">true</item>
+        <item name="counterMaxLength">30</item>
+    </style>
+
+    <style name="main_screen_recycler_view_style">
+        <item name="android:padding">@dimen/main_screen_recycler_view_padding</item>
+    </style>
+
+    <style name="main_screen_item_cardview_style">
+        <item name="android:elevation">@dimen/main_screen_item_cardview_elevation</item>
+        <item name="android:layout_margin">@dimen/main_screen_item_cardview_margin</item>
+        <item name="cardCornerRadius">@dimen/main_screen_item_cardview_corner_radius</item>
+    </style>
+
+    <style name="main_screen_rv_item_container_style">
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/main_screen_rv_item_container_padding</item>
+    </style>
+
+    <style name="main_screen_rv_item_word_style">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
