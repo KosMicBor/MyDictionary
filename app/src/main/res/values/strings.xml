@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyDictionary</string>
+    <string name="main_screen_text_input_hint">Type the word here</string>
+    <string name="main_screen_translate_button_text">Translate</string>
+    <string name="main_screen_rv_item_word_examples_label">Examples:</string>
+    <string name="error_try_again_button">try again</string>
+    <string name="part_of_speech_label">Part of speech</string>
+    <string name="no_information_content_text">no information</string>
+    <string name="pronunciation_label_text">Pronunciation</string>
+    <string name="translation_label_text">Translation</string>
 </resources>
