@@ -2,26 +2,23 @@ package kosmicbor.mydictionary
 
 import android.app.Application
 import android.content.Context
-import kosmicbor.mydictionary.model.data.repositories.DictionaryRepositoryImpl
-import kosmicbor.mydictionary.model.data.usecases.MainScreenUseCaseImpl
-import kosmicbor.mydictionary.model.datasource.DataSourceRemote
-import kosmicbor.mydictionary.model.datasource.retrofit.RetrofitImpl
-import kosmicbor.mydictionary.model.domain.DictionaryView
-import kosmicbor.mydictionary.model.domain.MainPresenter
-import kosmicbor.mydictionary.ui.mainscreen.MainPresenterImpl
+import kosmicbor.mydictionary.di.AppComponent
+import kosmicbor.mydictionary.di.DaggerAppComponent
+import kosmicbor.mydictionary.di.modules.*
 
 class App : Application() {
 
-    val presenter: MainPresenter<DictionaryView> by lazy {
-        MainPresenterImpl(
-            MainScreenUseCaseImpl(
-                DictionaryRepositoryImpl(
-                    DataSourceRemote(
-                        RetrofitImpl()
-                    )
-                )
-            )
-        )
+    lateinit var appComponent: AppComponent
+
+    override fun onCreate() {
+        super.onCreate()
+
+        appComponent = DaggerAppComponent.builder()
+            .dataSourceModule(DataSourceModule())
+            .httpClientModule(HttpClientModule())
+            .repositoryModule(RepositoryModule())
+            .useCasesModule(UseCasesModule())
+            .build()
     }
 }
 

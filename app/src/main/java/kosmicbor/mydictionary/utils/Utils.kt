@@ -1,17 +1,20 @@
 package kosmicbor.mydictionary.utils
 
-import android.util.Log
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import kosmicbor.mydictionary.model.data.*
 import kosmicbor.mydictionary.model.datasource.dto.*
 
 fun convertWordDefinitionDtoToWordDefinition(listDto: List<WordDefinitionDto>): List<WordDefinition> {
-    Log.d("@@@", "Convert $listDto")
     return listDto.map {
         WordDefinition(
             originalWord = it.text,
             partOfSpeech = it.partOfSpeech,
             pronunciation = it.transcription,
-            translationsArray = convertWordTranslationDtoToWordTranslation(it.translationArray ?: emptyList())
+            translationsArray = convertWordTranslationDtoToWordTranslation(
+                it.translationArray ?: emptyList()
+            )
         )
     }
 }
@@ -63,4 +66,13 @@ fun convertSynonymsDtoToSynonyms(synonymsList: List<SynonymDto>): List<Synonym> 
             synonymGender = it.synonymGender
         )
     }
+}
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+    return networkInfo != null && networkInfo.isConnected
 }
