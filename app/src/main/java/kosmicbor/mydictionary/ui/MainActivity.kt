@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
@@ -14,45 +14,62 @@ import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.app
 import kosmicbor.mydictionary.databinding.ActivityMainBinding
 import kosmicbor.mydictionary.model.data.WordDefinition
-import kosmicbor.mydictionary.model.domain.DictionaryView
-import kosmicbor.mydictionary.model.domain.MainPresenter
+import kosmicbor.mydictionary.model.domain.BaseActivity
+import kosmicbor.mydictionary.model.domain.BaseViewModel
 import kosmicbor.mydictionary.ui.mainscreen.MainScreenRvAdapter
+import kosmicbor.mydictionary.ui.mainscreen.MainViewModelFactory
+import kosmicbor.mydictionary.ui.mainscreen.SavedStateViewModelFactory
 import kosmicbor.mydictionary.utils.AppState
 import kosmicbor.mydictionary.utils.AppStateError
 import kosmicbor.mydictionary.utils.LoadingState
 import kosmicbor.mydictionary.utils.Success
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), DictionaryView {
+class MainActivity : BaseActivity<AppState>() {
 
     companion object {
         const val TRANSLATION_DIRECTION = "en-ru"
     }
 
+    @Inject
+    lateinit var factory: MainViewModelFactory
+
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
-    private lateinit var presenter: MainPresenter<DictionaryView>
     private val recyclerViewAdapter = MainScreenRvAdapter()
     private lateinit var lookupWord: String
 
-    override fun onStart() {
-        presenter.attachView(this@MainActivity)
-        super.onStart()
+    override val viewModel: BaseViewModel<AppState> by viewModels {
+        SavedStateViewModelFactory(factory, this)
+    }
+
+    override fun onResume() {
+        viewModel.restoreLookupWord()?.let {
+            viewModel.getData(it, TRANSLATION_DIRECTION)
+        }
+        super.onResume()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = app.presenter
+        app.appComponent.inject(this@MainActivity)
 
-        presenter.restoreState()
-
+        checkConnection(this@MainActivity)
+        initViewModel()
         initRecyclerView()
         initButtonClickListener()
 
     }
 
+    private fun initViewModel() {
+        viewModel.dataToObserve.observe(this) {
+            renderData(it)
+        }
+    }
+
     private fun initRecyclerView() {
-        binding.mainScreenRecyclerView.apply {
+        with(binding.mainScreenRecyclerView) {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = recyclerViewAdapter
         }
@@ -61,9 +78,14 @@ class MainActivity : AppCompatActivity(), DictionaryView {
 
     private fun initButtonClickListener() {
         binding.mainScreenTranslateButton.setOnClickListener {
+
+            checkConnection(this@MainActivity)
+
             lookupWord = binding.mainScreenTextInputEditText.text.toString()
-            presenter.saveCurrentLookupWord(lookupWord)
-            presenter.getData(lookupWord ?: "", TRANSLATION_DIRECTION)
+
+            if (isDeviceOnline) {
+                viewModel.getData(lookupWord, TRANSLATION_DIRECTION)
+            }
         }
     }
 
@@ -103,7 +125,7 @@ class MainActivity : AppCompatActivity(), DictionaryView {
     }
 
     override fun showProgress() {
-        binding.apply {
+        with(binding) {
 
             if (mainScreenBackgroundImageview.visibility == View.VISIBLE) {
                 mainScreenBackgroundImageview.visibility = View.GONE
@@ -118,7 +140,7 @@ class MainActivity : AppCompatActivity(), DictionaryView {
 
     override fun showStandardViews() {
 
-        binding.apply {
+        with(binding) {
 
             if (mainScreenBackgroundImageview.visibility == View.VISIBLE) {
                 mainScreenBackgroundImageview.visibility = View.GONE
@@ -130,11 +152,6 @@ class MainActivity : AppCompatActivity(), DictionaryView {
             mainScreenProgressbar.visibility = View.GONE
         }
 
-    }
-
-    override fun onStop() {
-        presenter.detachView(this)
-        super.onStop()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -152,5 +169,13 @@ class MainActivity : AppCompatActivity(), DictionaryView {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onStop() {
+        if (!lookupWord.isNullOrBlank()) {
+            viewModel.saveLookupWord(lookupWord)
+        }
+
+        super.onStop()
     }
 }

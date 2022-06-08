@@ -2,11 +2,15 @@ package kosmicbor.mydictionary.model.datasource.dto
 
 import com.google.gson.annotations.SerializedName
 
+private const val PARAM_SYNONYM_DTO_TEXT = "text"
+private const val PARAM_SYNONYM_DTO_POS = "pos"
+private const val PARAM_SYNONYM_DTO_GEN = "gen"
+
 data class SynonymDto(
-    @SerializedName("text")
+    @SerializedName(PARAM_SYNONYM_DTO_TEXT)
     val synonymText: String?,
-    @SerializedName("pos")
+    @SerializedName(PARAM_SYNONYM_DTO_POS)
     val synonymPartOfSpeech: String?,
-    @SerializedName("gen")
+    @SerializedName(PARAM_SYNONYM_DTO_GEN)
     val synonymGender: String?
 )

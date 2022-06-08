@@ -14,5 +14,3 @@ interface DictionaryApiSource {
         @Query("text") searchWord: String,
     ): Observable<DictionaryDataDto>
 }
-
-//https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=API-ключ&lang=en-ru&text=time

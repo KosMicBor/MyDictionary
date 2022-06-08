@@ -2,9 +2,12 @@ package kosmicbor.mydictionary.model.datasource.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ExamplesDto (
-    @SerializedName("text")
+private const val PARAM_EXAMPLES_DTO_TEXT = "text"
+private const val PARAM_EXAMPLES_DTO_TR = "tr"
+
+data class ExamplesDto(
+    @SerializedName(PARAM_EXAMPLES_DTO_TEXT)
     val exampleText: String,
-    @SerializedName("tr")
+    @SerializedName(PARAM_EXAMPLES_DTO_TR)
     val exampleTranslation: List<ExampleTranslationDto>,
 )
