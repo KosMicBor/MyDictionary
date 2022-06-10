@@ -1,4 +1,5 @@
 package kosmicbor.mydictionary.model.domain
 
-interface MainScreenUseCase: GetTranslationDataUseCase {
-}
+import org.koin.core.component.KoinComponent
+
+interface MainScreenUseCase : GetTranslationDataUseCase, KoinComponent

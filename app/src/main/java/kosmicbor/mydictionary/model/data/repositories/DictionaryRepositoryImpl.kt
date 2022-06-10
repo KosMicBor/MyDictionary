@@ -9,6 +9,7 @@ import kosmicbor.mydictionary.model.domain.DictionaryRepository
 class DictionaryRepositoryImpl(
     private val dataSource: DataSource<List<WordDefinition>>
 ) : DictionaryRepository {
+
     override fun getWordDefinition(
         lookupWord: String,
         translationDirection: String

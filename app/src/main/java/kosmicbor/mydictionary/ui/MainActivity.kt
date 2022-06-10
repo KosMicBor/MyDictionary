@@ -5,25 +5,21 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kosmicbor.mydictionary.R
-import kosmicbor.mydictionary.app
 import kosmicbor.mydictionary.databinding.ActivityMainBinding
 import kosmicbor.mydictionary.model.data.WordDefinition
 import kosmicbor.mydictionary.model.domain.BaseActivity
-import kosmicbor.mydictionary.model.domain.BaseViewModel
 import kosmicbor.mydictionary.ui.mainscreen.MainScreenRvAdapter
-import kosmicbor.mydictionary.ui.mainscreen.MainViewModelFactory
-import kosmicbor.mydictionary.ui.mainscreen.SavedStateViewModelFactory
+import kosmicbor.mydictionary.ui.mainscreen.MainScreenViewModel
 import kosmicbor.mydictionary.utils.AppState
 import kosmicbor.mydictionary.utils.AppStateError
 import kosmicbor.mydictionary.utils.LoadingState
 import kosmicbor.mydictionary.utils.Success
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MainActivity : BaseActivity<AppState>() {
 
@@ -31,16 +27,11 @@ class MainActivity : BaseActivity<AppState>() {
         const val TRANSLATION_DIRECTION = "en-ru"
     }
 
-    @Inject
-    lateinit var factory: MainViewModelFactory
-
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
     private val recyclerViewAdapter = MainScreenRvAdapter()
     private lateinit var lookupWord: String
 
-    override val viewModel: BaseViewModel<AppState> by viewModels {
-        SavedStateViewModelFactory(factory, this)
-    }
+    override val viewModel: MainScreenViewModel by stateViewModel()
 
     override fun onResume() {
         viewModel.restoreLookupWord()?.let {
@@ -52,8 +43,6 @@ class MainActivity : BaseActivity<AppState>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        app.appComponent.inject(this@MainActivity)
 
         checkConnection(this@MainActivity)
         initViewModel()
