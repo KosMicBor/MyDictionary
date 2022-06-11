@@ -1,6 +1,5 @@
 package kosmicbor.mydictionary.di.modules
 
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import kosmicbor.mydictionary.BuildConfig
 import kosmicbor.mydictionary.model.data.WordDefinition
 import kosmicbor.mydictionary.model.data.repositories.DictionaryRepositoryImpl
@@ -19,7 +18,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +31,6 @@ private const val REMOTE_DATA_SOURCE_NAME = "remote_data_source"
 private const val DICTIONARY_API_SERVICE_NAME = "dictionary_api"
 private const val RETROFIT_NAME = "dictionary_retrofit"
 private const val GSON_CONVERTER_FACTORY_NAME = "gson_converter_factory"
-private const val RX_JAVA_CALL_ADAPTER_NAME = "rx_java_3_call_adapter_factory"
 private const val OK_HTTP_CLIENT_NAME = "ok_http_client"
 private const val HTTP_LOGGING_INTERCEPTOR_NAME = "http_logging_interceptor"
 private const val CUSTOM_LOGGING_INTERCEPTOR_NAME = "custom_logging_interceptor"
@@ -48,15 +45,11 @@ val dataSourceModule = module {
         GsonConverterFactory.create()
     }
 
-    factory<CallAdapter.Factory>(named(RX_JAVA_CALL_ADAPTER_NAME)) {
-        RxJava3CallAdapterFactory.create()
-    }
 
     single<Retrofit>(named(RETROFIT_NAME)) {
         Retrofit.Builder()
             .baseUrl(get<String>(qualifier = named(BASE_URL_NAME)))
             .addConverterFactory(get(qualifier = named(GSON_CONVERTER_FACTORY_NAME)))
-            .addCallAdapterFactory(get(qualifier = named(RX_JAVA_CALL_ADAPTER_NAME)))
             .client(get(qualifier = named(OK_HTTP_CLIENT_NAME)))
             .build()
     }

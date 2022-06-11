@@ -5,8 +5,8 @@ import kosmicbor.mydictionary.utils.AppState
 import org.koin.core.component.KoinComponent
 
 interface GetTranslationDataUseCase  {
-    fun getTranslationData(
+    suspend fun getTranslationData(
         lookupWord: String,
         translationDirection: String
-    ) : Observable<AppState>
+    ) : AppState
 }
