@@ -8,7 +8,7 @@ import kotlinx.coroutines.*
 abstract class BaseViewModel<T : AppState> : ViewModel() {
 
     protected open val viewModelCoroutineScope = CoroutineScope(
-        Dispatchers.Main
+        Dispatchers.IO
                 + SupervisorJob()
                 + CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)
@@ -17,11 +17,11 @@ abstract class BaseViewModel<T : AppState> : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        cancelJob()
+        viewModelCoroutineScope.cancel()
     }
 
-    protected open fun cancelJob() {
-        viewModelCoroutineScope.coroutineContext.cancelChildren()
+    protected open fun cancelJob(job: Job) {
+        job.cancel()
     }
 
     abstract val dataToObserve: LiveData<T>

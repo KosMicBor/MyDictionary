@@ -22,8 +22,10 @@ class MainScreenViewModel(
     override val dataToObserve: MutableLiveData<AppState> = MutableLiveData()
 
     override fun getData(lookupWord: String, translationDirection: String) {
-        dataToObserve.postValue(LoadingState(null))
-        cancelJob()
+        val job = viewModelCoroutineScope.launch {
+            dataToObserve.postValue(LoadingState(null))
+        }
+        cancelJob(job)
 
         viewModelCoroutineScope.launch {
             dataToObserve.postValue(useCase.getTranslationData(lookupWord, translationDirection))
