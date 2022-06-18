@@ -1,6 +1,6 @@
 package kosmicbor.mydictionary.model.domain
 
-import io.reactivex.rxjava3.core.Observable
+import kosmicbor.mydictionary.model.data.LocalWord
 import kosmicbor.mydictionary.model.data.WordDefinition
 
 interface DictionaryRepository {
@@ -8,4 +8,12 @@ interface DictionaryRepository {
         lookupWord: String,
         translationDirection: String
     ): List<WordDefinition>
+
+    suspend fun getLocalDataList(): List<LocalWord>
+
+    suspend fun getSearchWords(word: String): List<LocalWord>
+
+    suspend fun saveWordToDb(word: LocalWord)
+
+    suspend fun deleteWordFromDb(word: String)
 }

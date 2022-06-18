@@ -34,4 +34,17 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="history_screen_rv_item_word_style">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="history_screen_text_input_layout_style">
+        <item name="android:layout_margin">@dimen/history_screen_text_input_layout_margin</item>
+        <item name="counterEnabled">true</item>
+        <item name="counterMaxLength">30</item>
+    </style>
+
+
 </resources>

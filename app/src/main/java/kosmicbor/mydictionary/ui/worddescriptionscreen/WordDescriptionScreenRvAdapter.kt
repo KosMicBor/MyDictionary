@@ -1,42 +1,43 @@
-package kosmicbor.mydictionary.ui.mainscreen
+package kosmicbor.mydictionary.ui.worddescriptionscreen
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kosmicbor.mydictionary.R
-import kosmicbor.mydictionary.databinding.MainScreenRvItemLayoutBinding
+import kosmicbor.mydictionary.databinding.WordDescriptionScreenRvItemBinding
 import kosmicbor.mydictionary.model.data.WordDefinition
 import kosmicbor.mydictionary.utils.buildExamplesText
 import kosmicbor.mydictionary.utils.createStringLine
 import kosmicbor.mydictionary.utils.uniteTranslationOptions
 
-class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenViewHolder>() {
+class WordDescriptionScreenRvAdapter(private val translationList: List<WordDefinition>) :
+    RecyclerView.Adapter<WordDescriptionScreenRvAdapter.WordDescriptionScreenViewHolder>() {
 
-    private val translationList: MutableList<WordDefinition> = mutableListOf()
-
-    inner class MainScreenViewHolder(binding: MainScreenRvItemLayoutBinding) :
+    inner class WordDescriptionScreenViewHolder(binding: WordDescriptionScreenRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        val word = binding.mainScreenRvItemWordTextview
-        val wordPartOfSpeech = binding.mainScreenRvItemWordPosTextview
-        val wordPronunciation = binding.mainScreenRvItemWordPronunciationTextview
-        val wordTranslation = binding.mainScreenRvItemWordTranslationTextview
-        val wordExamples = binding.mainScreenRvItemWordExamplesTextview
+        val word = binding.wordDescriptionScreenRvItemWordTextview
+        val wordPartOfSpeech = binding.wordDescriptionScreenRvItemWordPosTextview
+        val wordPronunciation = binding.wordDescriptionScreenRvItemWordPronunciationTextview
+        val wordTranslation = binding.wordDescriptionScreenRvItemWordTranslationTextview
+        val wordExamples = binding.wordDescriptionScreenRvItemWordExamplesTextview
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainScreenViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): WordDescriptionScreenViewHolder {
 
-        val itemBinding = MainScreenRvItemLayoutBinding.inflate(
+        val itemBinding = WordDescriptionScreenRvItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
 
-        return MainScreenViewHolder(itemBinding)
+        return WordDescriptionScreenViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: MainScreenViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: WordDescriptionScreenViewHolder, position: Int) {
         with(holder) {
             word.text = translationList[position].originalWord
 
@@ -71,11 +72,4 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
     }
 
     override fun getItemCount() = translationList.size
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateData(list: List<WordDefinition>) {
-        translationList.clear()
-        translationList.addAll(list)
-        notifyDataSetChanged()
-    }
 }

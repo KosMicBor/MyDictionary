@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/history_recycler_view_item_container_cardview"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/history_recycler_view_item_container_height"
+    android:elevation="@dimen/history_recycler_view_item_container_elevation"
+    app:cardCornerRadius="@dimen/history_recycler_view_item_container_cardview_corner_radius"
+    android:padding="@dimen/history_recycler_view_item_container_padding"
+    android:layout_margin="@dimen/history_recycler_view_item_container_cardview_margin">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/history_recycler_view_item_container_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/history_recycler_view_item_word_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Word"
+            style="@style/history_screen_rv_item_word_style"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/history_recycler_view_item_date_text_view"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/history_recycler_view_item_date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="17-03-1987"
+            app:layout_constraintStart_toStartOf="@id/history_recycler_view_item_word_text_view"
+            app:layout_constraintTop_toBottomOf="@id/history_recycler_view_item_word_text_view"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/history_recycler_view_item_delete_button_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:layout_marginEnd="@dimen/history_recycler_view_item_delete_button_image_view_margin_end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

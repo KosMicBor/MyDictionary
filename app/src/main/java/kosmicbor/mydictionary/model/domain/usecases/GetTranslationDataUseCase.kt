@@ -1,4 +1,4 @@
-package kosmicbor.mydictionary.model.domain
+package kosmicbor.mydictionary.model.domain.usecases
 
 import io.reactivex.rxjava3.core.Observable
 import kosmicbor.mydictionary.utils.AppState

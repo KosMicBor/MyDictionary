@@ -2,6 +2,7 @@ package kosmicbor.mydictionary
 
 import android.app.Application
 import android.content.Context
+import androidx.viewbinding.BuildConfig
 import kosmicbor.mydictionary.di.modules.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

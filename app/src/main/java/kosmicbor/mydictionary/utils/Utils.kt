@@ -5,7 +5,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import kosmicbor.mydictionary.model.data.*
 import kosmicbor.mydictionary.model.datasource.dto.*
+import kosmicbor.mydictionary.model.datasource.room.LocalWordDto
 
+const val ZERO_VAL = 0
+
+
+//Remote Data transformation
 fun convertWordDefinitionDtoToWordDefinition(listDto: List<WordDefinitionDto>): List<WordDefinition> {
     return listDto.map {
         WordDefinition(
@@ -75,4 +80,96 @@ fun isNetworkAvailable(context: Context): Boolean {
     val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
 
     return networkInfo != null && networkInfo.isConnected
+}
+
+//Local Data transformation
+
+fun convertLocalWordToLocalWordDTO(wordObject: LocalWord): LocalWordDto {
+    return LocalWordDto(
+        id = ZERO_VAL,
+        word = wordObject.word,
+        translationDirection = wordObject.translationDirection,
+        date = wordObject.date
+    )
+
+}
+
+//String build methods
+
+fun buildExamplesText(translationsArray: List<WordTranslation>?): String {
+
+    val sb = StringBuilder()
+
+    translationsArray?.forEach {
+
+        it.examples?.forEach { example ->
+
+            sb.append("- ${example.exampleText} ")
+
+            sb.append(
+                "(${
+                    getExampleTranslations(
+                        example.exampleTranslation
+                    )
+                })"
+            )
+
+            sb.append("\n")
+        }
+    }
+
+    return sb.toString()
+}
+
+fun getExampleTranslations(exampleTranslations: List<ExampleTranslation>): String {
+    val sb = StringBuilder()
+
+    val iterator = exampleTranslations.iterator()
+
+    while (iterator.hasNext()) {
+
+        sb.append(iterator.next().exampleTranslationText)
+
+        if (iterator.hasNext()) {
+            sb.append(", ")
+        }
+    }
+
+    return sb.toString()
+}
+
+fun uniteTranslationOptions(
+    label: String?,
+    translationsArray: List<WordTranslation>,
+): String {
+    val sb = StringBuilder()
+    sb.append("$label: ")
+
+    val iterator = translationsArray.iterator()
+
+    while (iterator.hasNext()) {
+
+        sb.append(iterator.next().translationText)
+
+        if (iterator.hasNext()) {
+            sb.append(", ")
+        }
+    }
+
+    return sb.toString()
+}
+
+fun createStringLine(label: String?, stroke: String?): String {
+    val sb = StringBuilder()
+
+    label?.apply {
+        sb.append(this)
+        sb.append(": ")
+    }
+
+    stroke?.apply {
+        sb.append(stroke)
+    }
+
+    return sb.toString()
 }

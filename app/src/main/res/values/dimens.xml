@@ -11,4 +11,17 @@
     <dimen name="main_screen_item_cardview_margin">12dp</dimen>
     <dimen name="main_screen_item_cardview_corner_radius">12dp</dimen>
     <dimen name="main_screen_rv_item_container_padding">12dp</dimen>
+    <dimen name="profile_description_text_view_padding">24dp</dimen>
+    <dimen name="profile_name_text_view_text_size">32sp</dimen>
+    <dimen name="profile_name_text_view_padding">16dp</dimen>
+    <dimen name="profile_image_view_margin">24dp</dimen>
+    <dimen name="history_recycler_view_padding">16dp</dimen>
+    <dimen name="history_recycler_view_item_container_padding">8dp</dimen>
+    <dimen name="history_recycler_view_item_container_height">70dp</dimen>
+    <dimen name="history_recycler_view_item_container_elevation">16dp</dimen>
+    <dimen name="history_recycler_view_item_container_cardview_corner_radius">8dp</dimen>
+    <dimen name="history_recycler_view_item_container_cardview_margin">8dp</dimen>
+    <dimen name="history_recycler_view_item_delete_button_image_view_margin_end">16dp</dimen>
+    <dimen name="history_screen_text_input_layout_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>
