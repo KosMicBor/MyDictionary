@@ -2,23 +2,31 @@ package kosmicbor.mydictionary
 
 import android.app.Application
 import android.content.Context
-import kosmicbor.mydictionary.di.AppComponent
-import kosmicbor.mydictionary.di.DaggerAppComponent
 import kosmicbor.mydictionary.di.modules.*
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import timber.log.Timber
 
 class App : Application() {
-
-    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent.builder()
-            .dataSourceModule(DataSourceModule())
-            .httpClientModule(HttpClientModule())
-            .repositoryModule(RepositoryModule())
-            .useCasesModule(UseCasesModule())
-            .build()
+        startKoin {
+            androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
+            androidContext(this@App)
+            modules(
+                dataSourceModule,
+                httpClientModule,
+                repositoryModule,
+                useCasesModule,
+                viewModelsModule
+            )
+        }
+
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
 }
 
