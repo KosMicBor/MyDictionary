@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import kosmicbor.mydictionary.utils.AppState
 import kotlinx.coroutines.*
 
-abstract class BaseViewModel<T : AppState> : ViewModel() {
+abstract class BaseMainScreenViewModel<T : AppState> : ViewModel() {
 
     protected open val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.IO
@@ -27,6 +27,7 @@ abstract class BaseViewModel<T : AppState> : ViewModel() {
     abstract val dataToObserve: LiveData<T>
     abstract fun getData(lookupWord: String, translationDirection: String)
     abstract fun saveLookupWord(word: String)
+    abstract suspend fun saveWordToDb(word: String, translationDirection: String)
     abstract fun restoreLookupWord(): String?
     abstract fun handleError(throwable: Throwable)
 }

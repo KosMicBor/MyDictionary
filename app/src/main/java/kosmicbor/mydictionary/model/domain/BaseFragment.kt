@@ -1,15 +1,18 @@
 package kosmicbor.mydictionary.model.domain
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.utils.AppState
 import kosmicbor.mydictionary.utils.isNetworkAvailable
 
-abstract class BaseActivity<T : AppState> : AppCompatActivity() {
+abstract class BaseFragment<T : AppState>(@LayoutRes contentLayoutId: Int) :
+    Fragment(contentLayoutId) {
 
-    abstract val viewModel: BaseViewModel<T>
+    abstract val viewModel: ViewModel
 
     protected var isDeviceOnline: Boolean = false
 
@@ -34,6 +37,4 @@ abstract class BaseActivity<T : AppState> : AppCompatActivity() {
     abstract fun renderData(appState: T)
     abstract fun showProgress()
     abstract fun showStandardViews()
-
-
 }
