@@ -8,19 +8,15 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentMainScreenBinding
-import kosmicbor.mydictionary.model.data.WordDefinition
+import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.model.domain.BaseFragment
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.AppStateError
-import kosmicbor.mydictionary.utils.LoadingState
-import kosmicbor.mydictionary.utils.Success
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class MainScreenFragment : BaseFragment<AppState>(R.layout.fragment_main_screen) {
+class MainScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_main_screen) {
 
     companion object {
 
@@ -86,14 +82,14 @@ class MainScreenFragment : BaseFragment<AppState>(R.layout.fragment_main_screen)
         }
     }
 
-    override fun renderData(appState: AppState) {
+    override fun renderData(appState: kosmicbor.giftapp.utils.AppState) {
         when (appState) {
 
-            is LoadingState -> {
+            is kosmicbor.giftapp.utils.LoadingState -> {
                 showProgress()
             }
 
-            is Success<*> -> {
+            is kosmicbor.giftapp.utils.Success<*> -> {
 
                 val data = appState.value as List<WordDefinition>
 
@@ -106,7 +102,7 @@ class MainScreenFragment : BaseFragment<AppState>(R.layout.fragment_main_screen)
                 recyclerViewAdapter.updateData(data)
             }
 
-            is AppStateError<*> -> {
+            is kosmicbor.giftapp.utils.AppStateError<*> -> {
 
                 appState.error.localizedMessage?.let {
                     Snackbar.make(

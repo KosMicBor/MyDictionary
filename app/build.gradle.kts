@@ -65,7 +65,7 @@ dependencies {
     implementation(Kotlin.legacySupport)
     implementation(Design.recyclerView)
 
-    //Text
+    //Test
     testImplementation(Test.junit)
     androidTestImplementation(Test.extJunit)
     androidTestImplementation(Test.espressoCore)
@@ -111,5 +111,9 @@ dependencies {
 
     //Glide
     implementation(Glide.glide)
-    annotationProcessor(Glide.annotationProcessorGlideCompiler)
+    kapt(Glide.annotationProcessorGlideCompiler)
+
+    //Modules
+    implementation(project(":utils"))
+    implementation(project(":core"))
 }

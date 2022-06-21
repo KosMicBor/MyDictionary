@@ -2,7 +2,7 @@ package kosmicbor.mydictionary.model.domain
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import kosmicbor.mydictionary.utils.AppState
+import kosmicbor.giftapp.utils.AppState
 import kotlinx.coroutines.*
 
 abstract class BaseMainScreenViewModel<T : AppState> : ViewModel() {

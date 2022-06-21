@@ -1,7 +1,7 @@
 package kosmicbor.mydictionary.model.domain
 
-import kosmicbor.mydictionary.model.data.LocalWord
-import kosmicbor.mydictionary.model.data.WordDefinition
+import kosmicbor.entities.LocalWord
+import kosmicbor.entities.WordDefinition
 
 interface DictionaryRepository {
     suspend fun getWordDefinition(

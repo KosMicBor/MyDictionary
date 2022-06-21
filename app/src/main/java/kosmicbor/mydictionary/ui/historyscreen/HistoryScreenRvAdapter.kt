@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kosmicbor.mydictionary.databinding.HistoryRecyclerViewItemBinding
-import kosmicbor.mydictionary.model.data.LocalWord
+import kosmicbor.entities.LocalWord
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment.Companion.BUNDLE_TRANSITION_DIRECTION_KEY
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment.Companion.BUNDLE_WORD_KEY
 
