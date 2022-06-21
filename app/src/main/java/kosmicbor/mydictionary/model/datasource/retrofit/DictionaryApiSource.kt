@@ -1,7 +1,6 @@
 package kosmicbor.mydictionary.model.datasource.retrofit
 
 import kosmicbor.mydictionary.model.datasource.dto.DictionaryDataDto
-import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
 

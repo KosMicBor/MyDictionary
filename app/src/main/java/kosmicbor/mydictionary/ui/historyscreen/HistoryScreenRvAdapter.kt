@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kosmicbor.mydictionary.databinding.HistoryRecyclerViewItemBinding
 import kosmicbor.mydictionary.model.data.LocalWord
-import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment.Companion.BUNDLE_TRANSITION_DIRECTION_KEY
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment.Companion.BUNDLE_WORD_KEY
 
@@ -54,7 +53,10 @@ class HistoryScreenRvAdapter(
 
                 val bundle = Bundle()
                 bundle.putString(BUNDLE_WORD_KEY, historyList[position].word)
-                bundle.putString(BUNDLE_TRANSITION_DIRECTION_KEY, historyList[position].translationDirection)
+                bundle.putString(
+                    BUNDLE_TRANSITION_DIRECTION_KEY,
+                    historyList[position].translationDirection
+                )
 
                 onItemClickCallback(bundle)
             }
