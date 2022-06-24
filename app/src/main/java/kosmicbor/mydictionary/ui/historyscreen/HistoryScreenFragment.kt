@@ -10,10 +10,13 @@ import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentHistoryScreenBinding
 import kosmicbor.entities.LocalWord
 import kosmicbor.mydictionary.model.domain.BaseFragment
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.scope.Scope
 
 class HistoryScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_history_screen),
-    HistoryController {
+    HistoryController, AndroidScopeComponent {
 
     companion object {
         fun newInstance() = HistoryScreenFragment()
@@ -23,7 +26,10 @@ class HistoryScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.l
         activity as OpenFragmentController
     }
 
-    override val viewModel: HistoryScreenViewModel by viewModel()
+
+    override val scope: Scope by fragmentScope()
+
+    override val viewModel: HistoryScreenViewModel by scope.inject()
     private val binding: FragmentHistoryScreenBinding by viewBinding(FragmentHistoryScreenBinding::bind)
     private val historyScreenAdapter: HistoryScreenRvAdapter by lazy {
         HistoryScreenRvAdapter(this) {

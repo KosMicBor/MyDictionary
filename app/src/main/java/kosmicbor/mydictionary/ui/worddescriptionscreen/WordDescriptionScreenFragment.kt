@@ -6,31 +6,40 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import kosmicbor.entities.WordDefinition
+import kosmicbor.giftapp.utils.getViewById
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentWordDescriptionScreenBinding
-import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.model.domain.BaseFragment
 import kosmicbor.mydictionary.ui.mainscreen.MainScreenFragment.Companion.TRANSLATION_DIRECTION
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.fragmentScope
+import org.koin.core.scope.Scope
 
 class WordDescriptionScreenFragment :
-    BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_word_description_screen) {
+    BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_word_description_screen),
+    AndroidScopeComponent {
 
     companion object {
         const val BUNDLE_WORD_KEY = "BUNDLE_WORD_KEY"
         const val BUNDLE_TRANSITION_DIRECTION_KEY = "BUNDLE_TRANSITION_DIRECTION_KEY"
     }
 
+    override val scope: Scope by fragmentScope()
+
     private var word: String? = null
     private var transitionDirection: String? = null
-    override val viewModel: WordDescriptionScreenViewModel by viewModel()
+    override val viewModel: WordDescriptionScreenViewModel by scope.inject()
     private lateinit var wordDescriptionAdapter: WordDescriptionScreenRvAdapter
     private val binding: FragmentWordDescriptionScreenBinding by viewBinding(
         FragmentWordDescriptionScreenBinding::bind
     )
+
+    private val recyclerView by getViewById<RecyclerView>(R.id.word_description_screen_recyclerview)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +96,7 @@ class WordDescriptionScreenFragment :
 
                 showStandardViews()
 
-                with(binding.wordDescriptionScreenRecyclerview) {
+                with(recyclerView) {
                     layoutManager = LinearLayoutManager(context)
                     adapter = wordDescriptionAdapter
                 }

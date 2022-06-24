@@ -1,13 +1,19 @@
 package kosmicbor.giftapp.utils
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.view.View
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
 import kosmicbor.dto.*
-import kosmicbor.entities.Example
 import kosmicbor.entities.*
+import java.lang.ref.WeakReference
+import kotlin.reflect.KProperty
 
 const val ZERO_VAL = 0
+const val NO_ROOT_MESSAGE = "Cannot get View, there is no root yet"
 
 //Remote Data transformation
 fun convertWordDefinitionDtoToWordDefinition(listDto: List<WordDefinitionDto>): List<WordDefinition> {
@@ -71,17 +77,6 @@ fun convertSynonymsDtoToSynonyms(synonymsList: List<SynonymDto>): List<Synonym> 
         )
     }
 }
-
-fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-
-    return networkInfo != null && networkInfo.isConnected
-}
-
-
 
 //String build methods
 
@@ -161,4 +156,47 @@ fun createStringLine(label: String?, stroke: String?): String {
     }
 
     return sb.toString()
+}
+
+
+class ViewByIdDelegate<out T : View>(private val rootGetter: () -> View?, private val viewId: Int) {
+    private var rootRef: WeakReference<View>? = null
+    private var viewRef: T? = null
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        var view = viewRef
+        val cachedRoot = rootRef?.get()
+
+        val currentRoot = rootGetter()
+
+        if (currentRoot != cachedRoot || view == null) {
+
+            if (currentRoot == null) {
+                if (view != null) {
+                    return view
+                }
+
+                throw IllegalStateException(
+                    NO_ROOT_MESSAGE
+                )
+            }
+
+            view = currentRoot.findViewById(viewId)
+
+            viewRef = view
+            rootRef = WeakReference(currentRoot)
+        }
+
+        checkNotNull(view) { "View with ID $viewId not found in root" }
+
+        return view
+    }
+}
+
+fun <T : View> Activity.getViewById(@IdRes viewId: Int): ViewByIdDelegate<T> {
+    return ViewByIdDelegate({ window.decorView.findViewById(android.R.id.content) }, viewId)
+}
+
+fun <T : View> Fragment.getViewById(@IdRes viewId: Int): ViewByIdDelegate<T> {
+    return ViewByIdDelegate({ view }, viewId)
 }

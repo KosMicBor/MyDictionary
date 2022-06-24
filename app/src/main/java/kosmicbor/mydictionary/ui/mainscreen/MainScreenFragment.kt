@@ -6,17 +6,22 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentMainScreenBinding
-import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.model.domain.BaseFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import org.koin.core.scope.Scope
 
-class MainScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_main_screen) {
+class MainScreenFragment :
+    BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_main_screen),
+    AndroidScopeComponent {
 
     companion object {
 
@@ -26,18 +31,25 @@ class MainScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layo
         const val TRANSLATION_DIRECTION = "en-ru"
     }
 
+    override val scope: Scope by fragmentScope()
+
     private val binding: FragmentMainScreenBinding by viewBinding(FragmentMainScreenBinding::bind)
     override val viewModel: MainScreenViewModel by stateViewModel()
     private val mainScope = CoroutineScope(Dispatchers.IO)
 
     private val recyclerViewAdapter = MainScreenRvAdapter()
     private var lookupWord: String = ""
+    private val snackbar by lazy {
+        Snackbar.make(binding.root, "Device is offline", Snackbar.LENGTH_INDEFINITE)
+    }
 
     override fun onResume() {
 
         viewModel.restoreLookupWord()?.let {
             viewModel.getData(it, TRANSLATION_DIRECTION)
         }
+
+        viewModel.checkNetworkStatus()
 
         super.onResume()
     }
@@ -54,6 +66,10 @@ class MainScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layo
         viewModel.dataToObserve.observe(viewLifecycleOwner) {
             renderData(it)
         }
+
+        viewModel.networkStatusToObserve.observe(viewLifecycleOwner) {
+            showNetworkStatusMessage(it)
+        }
     }
 
     private fun initRecyclerView() {
@@ -63,20 +79,31 @@ class MainScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layo
         }
     }
 
+    private fun showNetworkStatusMessage(status: Boolean) {
+
+        if (status) {
+            if (snackbar.isShown) {
+                snackbar.dismiss()
+            }
+            binding.mainScreenTranslateButton.isEnabled = true
+
+        } else {
+            snackbar.show()
+            binding.mainScreenTranslateButton.isEnabled = false
+        }
+    }
+
     private fun initButtonClickListener() {
         binding.mainScreenTranslateButton.setOnClickListener {
 
-            checkConnection(requireActivity())
-
             lookupWord = binding.mainScreenTextInputEditText.text.toString()
 
-            if (isDeviceOnline) {
-                viewModel.getData(lookupWord, TRANSLATION_DIRECTION)
 
-                mainScope.launch {
-                    if (lookupWord.isNotBlank()) {
-                        viewModel.saveWordToDb(lookupWord, TRANSLATION_DIRECTION)
-                    }
+            viewModel.getData(lookupWord, TRANSLATION_DIRECTION)
+
+            mainScope.launch {
+                if (lookupWord.isNotBlank()) {
+                    viewModel.saveWordToDb(lookupWord, TRANSLATION_DIRECTION)
                 }
             }
         }
