@@ -1,6 +1,6 @@
 package kosmicbor.mydictionary.model.domain.usecases
 
-import kosmicbor.mydictionary.utils.AppState
+import kosmicbor.giftapp.utils.AppState
 
 interface GetLocalDataListUseCase {
     suspend fun getDataList(): AppState

@@ -3,12 +3,8 @@ package kosmicbor.mydictionary.ui.historyscreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kosmicbor.mydictionary.model.data.LocalWord
+import kosmicbor.entities.LocalWord
 import kosmicbor.mydictionary.model.domain.usecases.HistoryScreenUseCase
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.AppStateError
-import kosmicbor.mydictionary.utils.LoadingState
-import kosmicbor.mydictionary.utils.Success
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -31,12 +27,12 @@ class HistoryScreenViewModel(
 
     val textChangedStateFlow = MutableStateFlow("")
 
-    private val _dataToObserve: MutableLiveData<AppState> = MutableLiveData()
-    val dataToObserve: LiveData<AppState> = _dataToObserve
+    private val _dataToObserve: MutableLiveData<kosmicbor.giftapp.utils.AppState> = MutableLiveData()
+    val dataToObserve: LiveData<kosmicbor.giftapp.utils.AppState> = _dataToObserve
 
     fun getData() {
         val job = viewModelCoroutineScope.launch {
-            _dataToObserve.postValue(LoadingState(null))
+            _dataToObserve.postValue(kosmicbor.giftapp.utils.LoadingState(null))
         }
 
         job.cancel()
@@ -57,7 +53,7 @@ class HistoryScreenViewModel(
     }
 
     private fun handleError(throwable: Throwable) {
-        _dataToObserve.postValue(AppStateError<Throwable>(throwable))
+        _dataToObserve.postValue(kosmicbor.giftapp.utils.AppStateError<Throwable>(throwable))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -84,7 +80,7 @@ class HistoryScreenViewModel(
                 }
                 .collect { result ->
                     Timber.tag("@@@").d(result.toString())
-                    _dataToObserve.postValue(Success(result))
+                    _dataToObserve.postValue(kosmicbor.giftapp.utils.Success(result))
                 }
         }
     }
@@ -96,7 +92,7 @@ class HistoryScreenViewModel(
     override fun onCleared() {
         super.onCleared()
 
-        _dataToObserve.value = Success(null)
+        _dataToObserve.value = kosmicbor.giftapp.utils.Success(null)
         viewModelCoroutineScope.cancel()
     }
 }

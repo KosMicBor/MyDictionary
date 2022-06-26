@@ -1,8 +1,8 @@
 package kosmicbor.mydictionary.model.data.repositories
 
 
-import kosmicbor.mydictionary.model.data.LocalWord
-import kosmicbor.mydictionary.model.data.WordDefinition
+import kosmicbor.entities.LocalWord
+import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.model.domain.RemoteDataSource
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
 import kosmicbor.mydictionary.model.domain.LocalDataSource

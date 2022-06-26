@@ -1,10 +1,9 @@
 package kosmicbor.mydictionary.model.data.usecases
 
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
-import kosmicbor.mydictionary.model.domain.usecases.GetTranslationDataUseCase
 import kosmicbor.mydictionary.model.domain.usecases.WordDescriptionScreenUseCase
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.Success
+import kosmicbor.giftapp.utils.AppState
+import kosmicbor.giftapp.utils.Success
 
 class WordDescriptionScreenUseCaseImpl(private val repository: DictionaryRepository) :
     WordDescriptionScreenUseCase {
@@ -12,6 +11,11 @@ class WordDescriptionScreenUseCaseImpl(private val repository: DictionaryReposit
         lookupWord: String,
         translationDirection: String
     ): AppState {
-        return Success(repository.getWordDefinition(lookupWord, translationDirection))
+        return Success(
+            repository.getWordDefinition(
+                lookupWord,
+                translationDirection
+            )
+        )
     }
 }

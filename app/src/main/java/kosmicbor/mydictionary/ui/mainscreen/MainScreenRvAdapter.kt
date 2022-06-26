@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.MainScreenRvItemLayoutBinding
-import kosmicbor.mydictionary.model.data.WordDefinition
-import kosmicbor.mydictionary.utils.buildExamplesText
-import kosmicbor.mydictionary.utils.createStringLine
-import kosmicbor.mydictionary.utils.uniteTranslationOptions
+import kosmicbor.entities.WordDefinition
 
 class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenViewHolder>() {
 
@@ -41,7 +38,7 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
             word.text = translationList[position].originalWord
 
             wordPartOfSpeech.text =
-                createStringLine(
+                kosmicbor.giftapp.utils.createStringLine(
                     this.itemView.context.getString(R.string.part_of_speech_label),
                     if (translationList[position].partOfSpeech.isNullOrBlank()) {
                         this.itemView.context.getString(R.string.no_information_content_text)
@@ -51,7 +48,7 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
                 )
 
             wordPronunciation.text =
-                createStringLine(
+                kosmicbor.giftapp.utils.createStringLine(
                     this.itemView.context.getString(R.string.pronunciation_label_text),
                     if (translationList[position].pronunciation.isNullOrBlank()) {
                         this.itemView.context.getString(R.string.no_information_content_text)
@@ -61,12 +58,13 @@ class MainScreenRvAdapter : RecyclerView.Adapter<MainScreenRvAdapter.MainScreenV
                 )
 
             wordTranslation.text =
-                uniteTranslationOptions(
+                kosmicbor.giftapp.utils.uniteTranslationOptions(
                     this.itemView.context.getString(R.string.translation_label_text),
                     translationList[position].translationsArray ?: emptyList()
                 )
 
-            wordExamples.text = buildExamplesText(translationList[position].translationsArray)
+            wordExamples.text =
+                kosmicbor.giftapp.utils.buildExamplesText(translationList[position].translationsArray)
         }
     }
 

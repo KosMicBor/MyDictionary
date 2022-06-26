@@ -5,9 +5,9 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kosmicbor.giftapp.utils.AppState
+import kosmicbor.giftapp.utils.isNetworkAvailable
 import kosmicbor.mydictionary.R
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.isNetworkAvailable
 
 abstract class BaseFragment<T : AppState>(@LayoutRes contentLayoutId: Int) :
     Fragment(contentLayoutId) {

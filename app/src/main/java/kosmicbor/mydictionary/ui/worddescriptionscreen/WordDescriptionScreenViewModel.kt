@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.mydictionary.model.domain.usecases.WordDescriptionScreenUseCase
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.AppStateError
-import kosmicbor.mydictionary.utils.LoadingState
+import kosmicbor.giftapp.utils.AppState
+import kosmicbor.giftapp.utils.AppStateError
+import kosmicbor.giftapp.utils.LoadingState
 import kotlinx.coroutines.*
 
 class WordDescriptionScreenViewModel(

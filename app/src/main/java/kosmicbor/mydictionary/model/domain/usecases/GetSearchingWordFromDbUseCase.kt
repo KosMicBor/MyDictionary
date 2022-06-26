@@ -1,6 +1,6 @@
 package kosmicbor.mydictionary.model.domain.usecases
 
-import kosmicbor.mydictionary.model.data.LocalWord
+import kosmicbor.entities.LocalWord
 
 interface GetSearchingWordFromDbUseCase {
     suspend fun getSearchingWord(word: String): List<LocalWord>

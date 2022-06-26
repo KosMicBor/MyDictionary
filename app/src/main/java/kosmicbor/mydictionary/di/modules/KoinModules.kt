@@ -2,18 +2,18 @@ package kosmicbor.mydictionary.di.modules
 
 import androidx.room.Room
 import kosmicbor.mydictionary.BuildConfig
-import kosmicbor.mydictionary.model.data.LocalWord
-import kosmicbor.mydictionary.model.data.WordDefinition
+import kosmicbor.entities.LocalWord
+import kosmicbor.entities.WordDefinition
 import kosmicbor.mydictionary.model.data.repositories.DictionaryRepositoryImpl
 import kosmicbor.mydictionary.model.data.usecases.HistoryScreenUseCaseImpl
 import kosmicbor.mydictionary.model.data.usecases.MainScreenUseCaseImpl
 import kosmicbor.mydictionary.model.data.usecases.WordDescriptionScreenUseCaseImpl
-import kosmicbor.mydictionary.model.datasource.BaseInterceptor
-import kosmicbor.mydictionary.model.datasource.retrofit.DictionaryApiSource
-import kosmicbor.mydictionary.model.datasource.retrofit.RetrofitImpl
-import kosmicbor.mydictionary.model.datasource.room.LocalDictionaryDataBase
-import kosmicbor.mydictionary.model.datasource.sources.DataSourceLocalImpl
-import kosmicbor.mydictionary.model.datasource.sources.DataSourceRemoteImpl
+import kosmicbor.mydictionary.model.data.datasource.BaseInterceptor
+import kosmicbor.mydictionary.model.data.datasource.retrofit.DictionaryApiSource
+import kosmicbor.mydictionary.model.data.datasource.retrofit.RetrofitImpl
+import kosmicbor.mydictionary.model.data.datasource.room.LocalDictionaryDataBase
+import kosmicbor.mydictionary.model.data.datasource.sources.DataSourceLocalImpl
+import kosmicbor.mydictionary.model.data.datasource.sources.DataSourceRemoteImpl
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
 import kosmicbor.mydictionary.model.domain.LocalDataSource
 import kosmicbor.mydictionary.model.domain.RemoteDataSource

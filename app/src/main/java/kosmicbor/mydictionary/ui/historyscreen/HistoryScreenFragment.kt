@@ -8,15 +8,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentHistoryScreenBinding
-import kosmicbor.mydictionary.model.data.LocalWord
+import kosmicbor.entities.LocalWord
 import kosmicbor.mydictionary.model.domain.BaseFragment
-import kosmicbor.mydictionary.utils.AppState
-import kosmicbor.mydictionary.utils.AppStateError
-import kosmicbor.mydictionary.utils.LoadingState
-import kosmicbor.mydictionary.utils.Success
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryScreenFragment : BaseFragment<AppState>(R.layout.fragment_history_screen),
+class HistoryScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_history_screen),
     HistoryController {
 
     companion object {
@@ -59,14 +55,14 @@ class HistoryScreenFragment : BaseFragment<AppState>(R.layout.fragment_history_s
         }
     }
 
-    override fun renderData(appState: AppState) {
+    override fun renderData(appState: kosmicbor.giftapp.utils.AppState) {
         when (appState) {
 
-            is LoadingState -> {
+            is kosmicbor.giftapp.utils.LoadingState -> {
                 showProgress()
             }
 
-            is Success<*> -> {
+            is kosmicbor.giftapp.utils.Success<*> -> {
 
                 val data = appState.value as List<LocalWord>
 
@@ -79,7 +75,7 @@ class HistoryScreenFragment : BaseFragment<AppState>(R.layout.fragment_history_s
                 historyScreenAdapter.updateData(data)
             }
 
-            is AppStateError<*> -> {
+            is kosmicbor.giftapp.utils.AppStateError<*> -> {
 
                 appState.error.localizedMessage?.let {
                     Snackbar.make(

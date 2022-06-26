@@ -1,7 +1,6 @@
 package kosmicbor.mydictionary.model.domain
 
-import kosmicbor.mydictionary.model.data.LocalWord
-import kosmicbor.mydictionary.model.datasource.room.LocalWordDto
+import kosmicbor.entities.LocalWord
 
 interface LocalDataSource<T> {
     suspend fun getLocalData(): T
