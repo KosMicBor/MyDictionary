@@ -3,75 +3,145 @@ package kosmicbor.mydictionary.ui
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.ActivityMainBinding
-import kosmicbor.mydictionary.ui.historyscreen.HistoryScreenFragment
-import kosmicbor.mydictionary.ui.historyscreen.OpenFragmentController
-import kosmicbor.mydictionary.ui.mainscreen.MainScreenFragment
-import kosmicbor.mydictionary.ui.profilescreen.ProfileScreenFragment
-import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment
+import kosmicbor.mydictionary.model.data.WordDefinition
+import kosmicbor.mydictionary.model.domain.BaseActivity
+import kosmicbor.mydictionary.ui.mainscreen.MainScreenRvAdapter
+import kosmicbor.mydictionary.ui.mainscreen.MainScreenViewModel
+import kosmicbor.mydictionary.utils.AppState
+import kosmicbor.mydictionary.utils.AppStateError
+import kosmicbor.mydictionary.utils.LoadingState
+import kosmicbor.mydictionary.utils.Success
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class MainActivity : AppCompatActivity(), OpenFragmentController {
+class MainActivity : BaseActivity<AppState>() {
+
+    companion object {
+        const val TRANSLATION_DIRECTION = "en-ru"
+    }
 
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
+    private val recyclerViewAdapter = MainScreenRvAdapter()
+    private lateinit var lookupWord: String
+
+    override val viewModel: MainScreenViewModel by stateViewModel()
+
+    override fun onResume() {
+        viewModel.restoreLookupWord()?.let {
+            viewModel.getData(it, TRANSLATION_DIRECTION)
+        }
+        super.onResume()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.main_container, MainScreenFragment.newInstance())
-                .commit()
-        }
+        checkConnection(this@MainActivity)
+        initViewModel()
+        initRecyclerView()
+        initButtonClickListener()
 
-        initBottomMenu()
     }
 
-    private fun initBottomMenu() {
-        binding.bottomNavigation.setOnItemSelectedListener {
+    private fun initViewModel() {
+        viewModel.dataToObserve.observe(this) {
+            renderData(it)
+        }
+    }
 
-            when (it.itemId) {
-                R.id.bottom_menu_search_button -> {
-                    supportFragmentManager.beginTransaction()
-                        .setReorderingAllowed(true)
-                        .replace(R.id.main_container, MainScreenFragment.newInstance())
-                        .addToBackStack("search")
-                        .commit()
+    private fun initRecyclerView() {
+        with(binding.mainScreenRecyclerView) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = recyclerViewAdapter
+        }
 
-                    true
-                }
-                R.id.bottom_menu_history_button -> {
-                    supportFragmentManager.beginTransaction()
-                        .setReorderingAllowed(true)
-                        .replace(R.id.main_container, HistoryScreenFragment.newInstance())
-                        .addToBackStack("history")
-                        .commit()
+    }
 
-                    true
-                }
+    private fun initButtonClickListener() {
+        binding.mainScreenTranslateButton.setOnClickListener {
 
-                R.id.bottom_menu_profile_button -> {
-                    supportFragmentManager.beginTransaction()
-                        .setReorderingAllowed(true)
-                        .replace(R.id.main_container, ProfileScreenFragment())
-                        .addToBackStack("profile")
-                        .commit()
+            checkConnection(this@MainActivity)
 
-                    true
-                }
-                else -> {
-                    false
-                }
+            lookupWord = binding.mainScreenTextInputEditText.text.toString()
+
+            if (isDeviceOnline) {
+                viewModel.getData(lookupWord, TRANSLATION_DIRECTION)
             }
         }
     }
 
+    override fun renderData(appState: AppState) {
+        when (appState) {
+
+            is LoadingState -> {
+                showProgress()
+            }
+
+            is Success<*> -> {
+
+                val data = appState.value as List<WordDefinition>
+
+                showStandardViews()
+
+                if (data.isEmpty()) {
+                    binding.mainScreenBackgroundImageview.visibility = View.VISIBLE
+                }
+
+                recyclerViewAdapter.updateData(data)
+            }
+
+            is AppStateError<*> -> {
+
+                appState.error.localizedMessage?.let {
+                    Snackbar.make(
+                        binding.root,
+                        it,
+                        Snackbar.LENGTH_SHORT,
+                    ).show()
+                }
+
+                showStandardViews()
+            }
+        }
+    }
+
+    override fun showProgress() {
+        with(binding) {
+
+            if (mainScreenBackgroundImageview.visibility == View.VISIBLE) {
+                mainScreenBackgroundImageview.visibility = View.GONE
+            }
+
+            mainScreenTranslateButton.visibility = View.GONE
+            mainScreenTextInputLayout.visibility = View.GONE
+            mainScreenRecyclerView.visibility = View.GONE
+            mainScreenProgressbar.visibility = View.VISIBLE
+        }
+    }
+
+    override fun showStandardViews() {
+
+        with(binding) {
+
+            if (mainScreenBackgroundImageview.visibility == View.VISIBLE) {
+                mainScreenBackgroundImageview.visibility = View.GONE
+            }
+
+            mainScreenTranslateButton.visibility = View.VISIBLE
+            mainScreenTextInputLayout.visibility = View.VISIBLE
+            mainScreenRecyclerView.visibility = View.VISIBLE
+            mainScreenProgressbar.visibility = View.GONE
+        }
+
+    }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev?.action == MotionEvent.ACTION_DOWN) {
@@ -90,16 +160,11 @@ class MainActivity : AppCompatActivity(), OpenFragmentController {
         return super.dispatchTouchEvent(ev)
     }
 
-    override fun openWordDescriptionFragment(bundle: Bundle) {
+    override fun onStop() {
+        if (!lookupWord.isNullOrBlank()) {
+            viewModel.saveLookupWord(lookupWord)
+        }
 
-        val fragment = WordDescriptionScreenFragment()
-
-        fragment.arguments = bundle
-
-        supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .addToBackStack("WordDefinitionFragment")
-            .replace(R.id.main_container, fragment)
-            .commit()
+        super.onStop()
     }
 }
