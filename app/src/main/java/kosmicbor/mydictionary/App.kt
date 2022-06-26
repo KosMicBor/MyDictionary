@@ -22,8 +22,9 @@ class App : Application() {
                 dataSourceModule,
                 httpClientModule,
                 repositoryModule,
-                useCasesModule,
-                viewModelsModule
+                mainScreenModule,
+                historyScreenModule,
+                wordDescriptionScreenViewModel
             )
         }
 

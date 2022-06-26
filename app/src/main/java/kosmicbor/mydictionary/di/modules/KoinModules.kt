@@ -1,27 +1,32 @@
 package kosmicbor.mydictionary.di.modules
 
 import androidx.room.Room
-import kosmicbor.mydictionary.BuildConfig
 import kosmicbor.entities.LocalWord
 import kosmicbor.entities.WordDefinition
-import kosmicbor.mydictionary.model.data.repositories.DictionaryRepositoryImpl
-import kosmicbor.mydictionary.model.data.usecases.HistoryScreenUseCaseImpl
-import kosmicbor.mydictionary.model.data.usecases.MainScreenUseCaseImpl
-import kosmicbor.mydictionary.model.data.usecases.WordDescriptionScreenUseCaseImpl
+import kosmicbor.mydictionary.BuildConfig
 import kosmicbor.mydictionary.model.data.datasource.BaseInterceptor
 import kosmicbor.mydictionary.model.data.datasource.retrofit.DictionaryApiSource
 import kosmicbor.mydictionary.model.data.datasource.retrofit.RetrofitImpl
 import kosmicbor.mydictionary.model.data.datasource.room.LocalDictionaryDataBase
 import kosmicbor.mydictionary.model.data.datasource.sources.DataSourceLocalImpl
 import kosmicbor.mydictionary.model.data.datasource.sources.DataSourceRemoteImpl
+import kosmicbor.mydictionary.model.data.repositories.DictionaryRepositoryImpl
+import kosmicbor.mydictionary.model.data.repositories.OnlineRepositoryImpl
+import kosmicbor.mydictionary.model.data.usecases.HistoryScreenUseCaseImpl
+import kosmicbor.mydictionary.model.data.usecases.MainScreenUseCaseImpl
+import kosmicbor.mydictionary.model.data.usecases.WordDescriptionScreenUseCaseImpl
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
 import kosmicbor.mydictionary.model.domain.LocalDataSource
+import kosmicbor.mydictionary.model.domain.OnlineRepository
 import kosmicbor.mydictionary.model.domain.RemoteDataSource
 import kosmicbor.mydictionary.model.domain.usecases.HistoryScreenUseCase
 import kosmicbor.mydictionary.model.domain.usecases.MainScreenUseCase
 import kosmicbor.mydictionary.model.domain.usecases.WordDescriptionScreenUseCase
+import kosmicbor.mydictionary.ui.historyscreen.HistoryScreenFragment
 import kosmicbor.mydictionary.ui.historyscreen.HistoryScreenViewModel
+import kosmicbor.mydictionary.ui.mainscreen.MainScreenFragment
 import kosmicbor.mydictionary.ui.mainscreen.MainScreenViewModel
+import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -47,6 +52,7 @@ private const val OK_HTTP_CLIENT_NAME = "ok_http_client"
 private const val HTTP_LOGGING_INTERCEPTOR_NAME = "http_logging_interceptor"
 private const val CUSTOM_LOGGING_INTERCEPTOR_NAME = "custom_logging_interceptor"
 private const val DICTIONARY_REPOSITORY_NAME = "dictionary_repository"
+private const val ONLINE_REPOSITORY_NAME = "online_repository"
 private const val DICTIONARY_MAIN_SCREEN_USECASE_NAME = "main_screen_usecase"
 private const val DICTIONARY_HISTORY_SCREEN_USECASE_NAME = "history_screen_usecase"
 private const val DICTIONARY_WORD_DESCRIPTION_SCREEN_USECASE_NAME =
@@ -157,45 +163,65 @@ val repositoryModule = module {
             localDataSource = get(named(LOCAL_DATA_SOURCE_NAME))
         )
     }
+
+    single<OnlineRepository>(named(ONLINE_REPOSITORY_NAME)) { OnlineRepositoryImpl(androidContext()) }
 }
 
-val useCasesModule = module {
-    factory<MainScreenUseCase>(qualifier = named(DICTIONARY_MAIN_SCREEN_USECASE_NAME)) {
-        MainScreenUseCaseImpl(repo = get(named(DICTIONARY_REPOSITORY_NAME)))
-    }
+val mainScreenModule = module {
 
-    factory<HistoryScreenUseCase>(qualifier = named(DICTIONARY_HISTORY_SCREEN_USECASE_NAME)) {
-        HistoryScreenUseCaseImpl(repository = get(named(DICTIONARY_REPOSITORY_NAME)))
-    }
+    scope<MainScreenFragment> {
+        scoped<MainScreenUseCase>(qualifier = named(DICTIONARY_MAIN_SCREEN_USECASE_NAME)) {
+            MainScreenUseCaseImpl(
+                repo = get(named(DICTIONARY_REPOSITORY_NAME)),
+                networkRepo = get(named(ONLINE_REPOSITORY_NAME))
+            )
+        }
 
-    factory<WordDescriptionScreenUseCase>(
-        qualifier = named(
-            DICTIONARY_WORD_DESCRIPTION_SCREEN_USECASE_NAME
-        )
-    ) {
-        WordDescriptionScreenUseCaseImpl(repository = get(named(DICTIONARY_REPOSITORY_NAME)))
+        viewModel { params ->
+            MainScreenViewModel(
+                useCase = get(named(DICTIONARY_MAIN_SCREEN_USECASE_NAME)),
+                savedStateHandle = params.get()
+            )
+        }
     }
 }
 
-val viewModelsModule = module {
-    viewModel { params ->
-        MainScreenViewModel(
-            useCase = get(named(DICTIONARY_MAIN_SCREEN_USECASE_NAME)),
-            savedStateHandle = params.get()
-        )
-    }
+val historyScreenModule = module {
 
-    viewModel {
-        HistoryScreenViewModel(useCase = get(named(DICTIONARY_HISTORY_SCREEN_USECASE_NAME)))
-    }
+    scope<HistoryScreenFragment> {
 
-    viewModel {
-        WordDescriptionScreenViewModel(
-            useCase = get(
-                named(
-                    DICTIONARY_WORD_DESCRIPTION_SCREEN_USECASE_NAME
+        scoped<HistoryScreenUseCase>(qualifier = named(DICTIONARY_HISTORY_SCREEN_USECASE_NAME)) {
+            HistoryScreenUseCaseImpl(repository = get(named(DICTIONARY_REPOSITORY_NAME)))
+        }
+
+        viewModel {
+            HistoryScreenViewModel(useCase = get(named(DICTIONARY_HISTORY_SCREEN_USECASE_NAME)))
+        }
+    }
+}
+
+val wordDescriptionScreenViewModel = module {
+
+    scope<WordDescriptionScreenFragment> {
+
+        scoped<WordDescriptionScreenUseCase>(
+            qualifier = named(
+                DICTIONARY_WORD_DESCRIPTION_SCREEN_USECASE_NAME
+            )
+        ) {
+            WordDescriptionScreenUseCaseImpl(repository = get(named(DICTIONARY_REPOSITORY_NAME)))
+        }
+
+        viewModel {
+            WordDescriptionScreenViewModel(
+                useCase = get(
+                    named(
+                        DICTIONARY_WORD_DESCRIPTION_SCREEN_USECASE_NAME
+                    )
                 )
             )
-        )
+        }
     }
+
+
 }

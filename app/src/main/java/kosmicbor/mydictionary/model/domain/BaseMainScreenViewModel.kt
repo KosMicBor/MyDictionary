@@ -25,6 +25,7 @@ abstract class BaseMainScreenViewModel<T : AppState> : ViewModel() {
     }
 
     abstract val dataToObserve: LiveData<T>
+    abstract val networkStatusToObserve: LiveData<Boolean>
     abstract fun getData(lookupWord: String, translationDirection: String)
     abstract fun saveLookupWord(word: String)
     abstract suspend fun saveWordToDb(word: String, translationDirection: String)

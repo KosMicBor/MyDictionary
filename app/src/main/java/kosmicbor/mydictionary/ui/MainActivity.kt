@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
+import kosmicbor.giftapp.utils.getViewById
 import kosmicbor.mydictionary.R
-import kosmicbor.mydictionary.databinding.ActivityMainBinding
 import kosmicbor.mydictionary.ui.historyscreen.HistoryScreenFragment
 import kosmicbor.mydictionary.ui.historyscreen.OpenFragmentController
 import kosmicbor.mydictionary.ui.mainscreen.MainScreenFragment
@@ -17,7 +17,7 @@ import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFrag
 
 class MainActivity : AppCompatActivity(), OpenFragmentController {
 
-    private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::bind)
+    private val bottomNavigation by getViewById<BottomNavigationView>(R.id.bottom_navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity(), OpenFragmentController {
     }
 
     private fun initBottomMenu() {
-        binding.bottomNavigation.setOnItemSelectedListener {
+
+        bottomNavigation.setOnItemSelectedListener {
 
             when (it.itemId) {
                 R.id.bottom_menu_search_button -> {
