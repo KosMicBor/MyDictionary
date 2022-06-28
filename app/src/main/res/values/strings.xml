@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MyDictionary</string>
     <string name="main_screen_text_input_hint">Type the word here</string>
+    <string name="widget_text_input_hint">Type the word here</string>
     <string name="main_screen_translate_button_text">Translate</string>
     <string name="main_screen_rv_item_word_examples_label">Examples:</string>
     <string name="error_try_again_button">try again</string>
@@ -17,4 +18,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_description_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pellentesque in odio in lobortis. Mauris lacus enim, pulvinar quis consequat nec, dictum vitae est. Pellentesque viverra in metus in ornare. Mauris diam diam, sodales dictum nulla in, convallis ullamcorper leo. Nam id ex eros. Curabitur vestibulum, velit vel congue ullamcorper.</string>
     <string name="profile_name_text_view_name_example">Mr. Smith</string>
+    <string name="widget_text">Translate it!</string>
 </resources>

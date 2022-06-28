@@ -222,6 +222,4 @@ val wordDescriptionScreenViewModel = module {
             )
         }
     }
-
-
 }

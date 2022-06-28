@@ -9,13 +9,14 @@ import com.google.android.material.snackbar.Snackbar
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentHistoryScreenBinding
 import kosmicbor.entities.LocalWord
+import kosmicbor.giftapp.utils.AppState
 import kosmicbor.mydictionary.model.domain.BaseFragment
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.scope.Scope
 
-class HistoryScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_history_screen),
+class HistoryScreenFragment : BaseFragment<AppState>(R.layout.fragment_history_screen),
     HistoryController, AndroidScopeComponent {
 
     companion object {
@@ -61,7 +62,7 @@ class HistoryScreenFragment : BaseFragment<kosmicbor.giftapp.utils.AppState>(R.l
         }
     }
 
-    override fun renderData(appState: kosmicbor.giftapp.utils.AppState) {
+    override fun renderData(appState: AppState) {
         when (appState) {
 
             is kosmicbor.giftapp.utils.LoadingState -> {

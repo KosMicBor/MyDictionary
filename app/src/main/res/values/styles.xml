@@ -46,5 +46,12 @@
         <item name="counterMaxLength">30</item>
     </style>
 
+    <style name="widget_text_input_layout_style">
+        <item name="android:layout_margin">@dimen/widget_text_input_layout_margin</item>
+        <item name="counterEnabled">true</item>
+        <item name="counterMaxLength">30</item>
+    </style>
+
+
 
 </resources>
