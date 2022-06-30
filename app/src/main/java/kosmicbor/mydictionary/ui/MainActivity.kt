@@ -1,10 +1,15 @@
 package kosmicbor.mydictionary.ui
 
+import android.animation.ObjectAnimator
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import kosmicbor.giftapp.utils.getViewById
@@ -16,6 +21,11 @@ import kosmicbor.mydictionary.ui.profilescreen.ProfileScreenFragment
 import kosmicbor.mydictionary.ui.worddescriptionscreen.WordDescriptionScreenFragment
 
 class MainActivity : AppCompatActivity(), OpenFragmentController {
+
+    companion object {
+        private const val SPLASH_SCREEN_ANIMATION_Y = 0f
+        private const val SPLASH_SCREEN_ANIMATION_DURATION = 2000L
+    }
 
     private val bottomNavigation by getViewById<BottomNavigationView>(R.id.bottom_navigation)
 
@@ -30,7 +40,29 @@ class MainActivity : AppCompatActivity(), OpenFragmentController {
                 .commit()
         }
 
+        setSplashScreenAnimation()
+
         initBottomMenu()
+    }
+
+    private fun setSplashScreenAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+
+                val slideLeft = ObjectAnimator.ofFloat(
+                    splashScreenView,
+                    View.TRANSLATION_X,
+                    SPLASH_SCREEN_ANIMATION_Y,
+                    -splashScreenView.height.toFloat()
+                ).apply {
+                    interpolator = AccelerateInterpolator()
+                    duration = SPLASH_SCREEN_ANIMATION_DURATION
+                    doOnEnd { splashScreenView.remove() }
+                }
+
+                slideLeft.start()
+            }
+        }
     }
 
     private fun initBottomMenu() {

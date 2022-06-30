@@ -1,12 +1,19 @@
 package kosmicbor.mydictionary.ui.mainscreen
 
 
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.entities.WordDefinition
+import kosmicbor.giftapp.utils.AppState
+import kosmicbor.giftapp.utils.AppStateError
+import kosmicbor.giftapp.utils.LoadingState
+import kosmicbor.giftapp.utils.Success
 import kosmicbor.mydictionary.R
 import kosmicbor.mydictionary.databinding.FragmentMainScreenBinding
 import kosmicbor.mydictionary.model.domain.BaseFragment
@@ -20,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import org.koin.core.scope.Scope
 
 class MainScreenFragment :
-    BaseFragment<kosmicbor.giftapp.utils.AppState>(R.layout.fragment_main_screen),
+    BaseFragment<AppState>(R.layout.fragment_main_screen),
     AndroidScopeComponent {
 
     companion object {
@@ -81,15 +88,29 @@ class MainScreenFragment :
 
     private fun showNetworkStatusMessage(status: Boolean) {
 
+
         if (status) {
+
             if (snackbar.isShown) {
                 snackbar.dismiss()
             }
+
             binding.mainScreenTranslateButton.isEnabled = true
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+                binding.mainScreenFragmentContainer.setRenderEffect(null)
+            }
 
         } else {
             snackbar.show()
             binding.mainScreenTranslateButton.isEnabled = false
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val blurEffect = RenderEffect.createBlurEffect(16f, 16f, Shader.TileMode.MIRROR)
+
+                binding.mainScreenFragmentContainer.setRenderEffect(blurEffect)
+            }
         }
     }
 
@@ -109,14 +130,14 @@ class MainScreenFragment :
         }
     }
 
-    override fun renderData(appState: kosmicbor.giftapp.utils.AppState) {
+    override fun renderData(appState: AppState) {
         when (appState) {
 
-            is kosmicbor.giftapp.utils.LoadingState -> {
+            is LoadingState -> {
                 showProgress()
             }
 
-            is kosmicbor.giftapp.utils.Success<*> -> {
+            is Success<*> -> {
 
                 val data = appState.value as List<WordDefinition>
 
@@ -129,7 +150,7 @@ class MainScreenFragment :
                 recyclerViewAdapter.updateData(data)
             }
 
-            is kosmicbor.giftapp.utils.AppStateError<*> -> {
+            is AppStateError<*> -> {
 
                 appState.error.localizedMessage?.let {
                     Snackbar.make(

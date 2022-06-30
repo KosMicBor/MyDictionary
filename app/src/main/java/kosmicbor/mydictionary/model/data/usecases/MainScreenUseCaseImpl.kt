@@ -1,6 +1,7 @@
 package kosmicbor.mydictionary.model.data.usecases
 
 import kosmicbor.entities.LocalWord
+import kosmicbor.giftapp.utils.Success
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
 import kosmicbor.mydictionary.model.domain.OnlineRepository
 import kosmicbor.mydictionary.model.domain.usecases.MainScreenUseCase
@@ -16,7 +17,7 @@ class MainScreenUseCaseImpl(
         lookupWord: String,
         translationDirection: String
     ): kosmicbor.giftapp.utils.AppState {
-        return kosmicbor.giftapp.utils.Success(
+        return Success(
             repo.getWordDefinition(
                 lookupWord,
                 translationDirection

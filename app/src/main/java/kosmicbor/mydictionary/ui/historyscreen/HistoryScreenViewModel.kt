@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.entities.LocalWord
+import kosmicbor.giftapp.utils.AppStateError
 import kosmicbor.mydictionary.model.domain.usecases.HistoryScreenUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -53,7 +54,7 @@ class HistoryScreenViewModel(
     }
 
     private fun handleError(throwable: Throwable) {
-        _dataToObserve.postValue(kosmicbor.giftapp.utils.AppStateError<Throwable>(throwable))
+        _dataToObserve.postValue(AppStateError<Throwable>(throwable))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)

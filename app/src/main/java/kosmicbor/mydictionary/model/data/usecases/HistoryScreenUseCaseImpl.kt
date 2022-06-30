@@ -1,13 +1,14 @@
 package kosmicbor.mydictionary.model.data.usecases
 
 import kosmicbor.entities.LocalWord
+import kosmicbor.giftapp.utils.Success
 import kosmicbor.mydictionary.model.domain.DictionaryRepository
 import kosmicbor.mydictionary.model.domain.usecases.HistoryScreenUseCase
 
 class HistoryScreenUseCaseImpl(private val repository: DictionaryRepository) :
     HistoryScreenUseCase {
     override suspend fun getDataList(): kosmicbor.giftapp.utils.AppState {
-        return kosmicbor.giftapp.utils.Success(repository.getLocalDataList())
+        return Success(repository.getLocalDataList())
     }
 
     override suspend fun deleteLocalWord(word: String) {

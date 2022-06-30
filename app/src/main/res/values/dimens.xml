@@ -24,4 +24,8 @@
     <dimen name="history_recycler_view_item_delete_button_image_view_margin_end">16dp</dimen>
     <dimen name="history_screen_text_input_layout_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="widget_text_input_layout_margin">16dp</dimen>
+    <dimen name="app_widget_min_width">260dp</dimen>
+    <dimen name="app_widget_min_height">40dp</dimen>
+    <dimen name="widget_translate_textview_text_size">24sp</dimen>
 </resources>
